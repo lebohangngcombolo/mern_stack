@@ -4,7 +4,7 @@ from flask import Flask
 from dotenv import load_dotenv
 from config import config
 from app.extensions import db, jwt, migrate, cors, limiter
-from app.services.email_service import mail, EmailService
+from app.services.email_service import EmailService
 from app.services.auth_service import AuthService
 
 # Load environment variables from .env
@@ -20,7 +20,6 @@ def create_app(config_name='default'):
     jwt.init_app(app)
     migrate.init_app(app, db)
     cors.init_app(app)
-    mail.init_app(app)
     limiter.init_app(app)
 
     # Register blueprints
