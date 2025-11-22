@@ -1,6 +1,4 @@
 # app/services/email_service.py
-from flask_mail import Mail, Message
-from flask import current_app
 
 import os
 from flask import current_app, render_template
@@ -49,4 +47,6 @@ class EmailService:
             sg.send(message)
 
         except Exception as e:
-            current_app.logger.error(f"Failed to send email to {to}: {str(e)}")
+            current_app.logger.error(
+                f"Failed to send email to {to_email}: {str(e)}"
+            )

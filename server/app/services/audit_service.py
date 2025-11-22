@@ -1,4 +1,3 @@
-# app/services/audit_service.py
 from flask import request, has_request_context, current_app
 from app.models import db, AuditLog
 import json
@@ -7,18 +6,26 @@ class AuditService:
     @staticmethod
     def log(user_id, action, resource=None, resource_id=None, details=None):
         try:
-            # Avoid serialization errors if details is dict
+            # Convert details dict → JSON
             if isinstance(details, dict):
                 try:
                     details = json.dumps(details)
                 except Exception:
                     details = str(details)
 
-            # Check if inside a request (API call) or running in background
+            # handle cases where request exists
             if has_request_context():
-                ip_address = request.remote_addr
+                # Render uses proxy → extract real client IP
+                forwarded_for = request.headers.get("X-Forwarded-For", None)
+                if forwarded_for:
+                    # Real IP is first in the chain
+                    ip_address = forwarded_for.split(",")[0].strip()
+                else:
+                    ip_address = request.remote_addr
+
                 user_agent = request.headers.get("User-Agent")
             else:
+                # Background / system operation
                 ip_address = "SYSTEM"
                 user_agent = "SYSTEM"
 
@@ -36,4 +43,10 @@ class AuditService:
             db.session.commit()
 
         except Exception as e:
-            current_app.logger.error(f"Audit log failed: {str(e)}")
+            try:
+                db.session.rollback()
+            except:
+                pass
+
+            if current_app:
+                current_app.logger.error(f"[AUDIT] Failed to log action: {str(e)}")
