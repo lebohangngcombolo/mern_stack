@@ -36,11 +36,4 @@ class AuditService:
             db.session.commit()
 
         except Exception as e:
-            # Prevent audit failures from breaking user actions
-            try:
-                db.session.rollback()
-            except:
-                pass
-
-            if current_app:
-                current_app.logger.error(f"[AUDIT] Failed to log action: {str(e)}")
+            current_app.logger.error(f"Audit log failed: {str(e)}")
