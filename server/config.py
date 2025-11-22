@@ -16,15 +16,15 @@ class Config:
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
     
     SUPER_ADMIN_EMAIL = os.environ.get('SUPER_ADMIN_EMAIL')
-    
-    # Email
-    MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.gmail.com')
-    MAIL_PORT = int(os.environ.get('MAIL_PORT', 587))
-    MAIL_USE_TLS = True
-    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    
-    # App
+
+    # ----------------------------
+    # SendGrid Email Configuration
+    # ----------------------------
+    SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
+    SENDGRID_SENDER = os.environ.get("SENDGRID_SENDER")  # e.g. no-reply@companyhub.com
+    # ----------------------------
+
+    # App URLs
     FRONTEND_URL = os.environ.get('FRONTEND_URL', 'http://localhost:3000')
     BACKEND_URL = os.environ.get('BACKEND_URL', 'http://localhost:5000')
     
@@ -34,8 +34,9 @@ class Config:
     # MFA
     MFA_ISSUER = os.environ.get('MFA_ISSUER', 'Company Hub')
     
-    RATELIMIT_STORAGE_URL = "memory://"  # Use redis in production: "redis://localhost:6379"
-    RATELIMIT_STRATEGY = "fixed-window"  # or "moving-window"
+    # Rate Limiting
+    RATELIMIT_STORAGE_URL = "memory://"  
+    RATELIMIT_STRATEGY = "fixed-window"
     RATELIMIT_HEADERS_ENABLED = True
 
 class DevelopmentConfig(Config):

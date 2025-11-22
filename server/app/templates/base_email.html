@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title if title else "Company Hub" }}</title>
+</head>
+<body style="font-family: Arial, sans-serif; color: #333; padding: 20px;">
+    <div style="
+        max-width: 600px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+    ">
+        <h2 style="color: #004aad; text-align:center;">Company Hub</h2>
+
+        {% block content %}
+        {% endblock %}
+
+        <hr style="margin-top: 30px;">
+
+        <p style="font-size: 12px; text-align:center; color: #777;">
+            This is an automated message. Please do not reply.
+        </p>
+    </div>
+</body>
+</html>
